@@ -11,7 +11,9 @@ import android.Manifest;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -26,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
     //musicDataArrayList
     private ArrayList<MusicData> musicDataArrayList = new ArrayList<>();
 
+    //MusicAdapter
+    private MusicAdapter musicAdapter;
+
+    private Player player;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         requestPermissionsFunc();
 
         //어뎁터생성
-        MusicAdapter musicAdapter=new MusicAdapter(getApplicationContext());
+       musicAdapter=new MusicAdapter(getApplicationContext());
 
         //리사이클로뷰에서 리니어레이아웃메니저를 적용시켜야된다.
         LinearLayoutManager linearLayoutManager =new LinearLayoutManager(getApplicationContext());
@@ -52,9 +59,21 @@ public class MainActivity extends AppCompatActivity {
         musicAdapter.setMusicList(musicDataArrayList);
         musicAdapter.notifyDataSetChanged();
 
+        //인터페이스 구현하지 못하면 여기서 스톱이다.
+        musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                player.setPlayerData(position,true);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
+
+
         //현제 액티비티있는 프레임레이아웃에 프래그먼트 지정
         replaceFrag();
     }
+
+
 
     // sdCard 안의 음악을 검색한다
     public ArrayList<MusicData> findMusic() {
@@ -107,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     //현제 액티비티있는 프레임레이아웃에 프래그먼트 지정
     private void replaceFrag() {
         //프래그먼트 생성
-        Player player = new Player();
+        player = new Player();
         FragmentTransaction ft  =getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayout, player);
         ft.commit();
@@ -118,5 +137,9 @@ public class MainActivity extends AppCompatActivity {
         frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerLike = (RecyclerView) findViewById(R.id.recyclerLike);
+    }
+
+    public ArrayList<MusicData> getMusicDataArrayList() {
+        return musicDataArrayList;
     }
 }

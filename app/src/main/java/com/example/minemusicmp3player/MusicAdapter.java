@@ -23,6 +23,8 @@ import java.util.ArrayList;
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.CustomViewHolder> {
     private Context context;
     private ArrayList<MusicData> musicList;
+    //3. 인터페이스를 멤버변수로 선언한다.
+    private OnItemClickListener onItemClickListener = null;
 
     //생성자
     public MusicAdapter(Context context) {
@@ -31,6 +33,11 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.CustomViewHo
     //setter
     public void setMusicList(ArrayList<MusicData> musicList) {
         this.musicList = musicList;
+    }
+
+    //4. setter 함수를 진행한다.
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     //리사클러 뷰에 들어갈 항목 뷰를 inflater 한다. ViewHolder 항목객체를 관리한다.
@@ -124,6 +131,21 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.CustomViewHo
             this.title = itemView.findViewById(R.id.d_tvTitle);
             this.artist = itemView.findViewById(R.id.d_tvArtist);
             this.duration = itemView.findViewById(R.id.d_tvDuration);
+
+            //5. 추상화메소드를 구현한다.
+            itemView.setOnClickListener(view ->{
+                int position = getAdapterPosition();
+                if(position != RecyclerView.NO_POSITION){
+                    onItemClickListener.onItemClick(view,position);
+                }
+            });
+
         }
+    }
+
+    //1. 인터페이스를 구현한다.setOnItemClickListener => setter함수
+    public interface OnItemClickListener{
+        //2. 추상화메소드 선언한다.
+        void onItemClick(View view, int position);
     }
 }
