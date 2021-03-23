@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:background="#fafafa"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#fafafa"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivAlbum"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_margin="20dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/album_default" />
+
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/tvPlayCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:text="20"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="음악이름"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="가수이름"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fafafa"
+            android:gravity="bottom|right"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp">
+
+            <ImageButton
+                android:id="@+id/ibLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#fafafa"
+                app:srcCompat="@drawable/like_button" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:paddingRight="10dp"
+                android:text="00:00"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12dp" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                style="@style/SeekBarColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="30dp"
+                android:text="00:00"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/ibPrevious"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/background_light"
+                android:src="@drawable/previous" />
+
+            <ImageButton
+                android:id="@+id/ibPlay"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#FFFFFF"
+                android:padding="20dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/play_button" />
+
+            <ImageButton
+                android:id="@+id/ibNext"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/background_light"
+                android:src="@drawable/next" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
