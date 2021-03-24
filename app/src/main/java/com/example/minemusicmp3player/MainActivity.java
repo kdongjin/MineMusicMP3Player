@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private MusicAdapter musicAdapter;
 
     private Player player;
+
+    //데이타베이스 객체 참조변수
+    private MusicDBHelper musicDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,18 @@ public class MainActivity extends AppCompatActivity {
 
         //ArrayList<MusicData>를 가져와서 musicAdater 적용시켜야된다.
         musicDataArrayList=findMusic();
+
+
         musicAdapter.setMusicList(musicDataArrayList);
         musicAdapter.notifyDataSetChanged();
+
+        //데이타베이스에 저장한다.
+        musicDBHelper = MusicDBHelper.getInstance(getApplicationContext());
+
+        //리사클러뷰에 나오는 노래를 저장한다.
+        musicDBHelper.insertMusicDataToDB(musicDataArrayList);
+        ArrayList<MusicData> data = musicDBHelper.selectMusicTbl();
+        Toast.makeText(this, "==="+data.size(), Toast.LENGTH_SHORT).show();
 
         //인터페이스 구현하지 못하면 여기서 스톱이다.
         musicAdapter.setOnItemClickListener(new MusicAdapter.OnItemClickListener() {
@@ -71,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         //현제 액티비티있는 프레임레이아웃에 프래그먼트 지정
         replaceFrag();
+
     }
 
 
@@ -142,4 +157,6 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<MusicData> getMusicDataArrayList() {
         return musicDataArrayList;
     }
+
+
 }

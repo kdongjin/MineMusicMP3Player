@@ -143,6 +143,11 @@ public class Player extends Fragment implements View.OnClickListener{
                     musicData.setLiked(1);
                     Toast.makeText(mainActivity, "좋아요", Toast.LENGTH_SHORT).show();
                 }
+                //데이타베이스 좋아요와 카운트값이 해당되는 노래에 수정이 완료된다.
+                MusicDBHelper musicDBHelper = MusicDBHelper.getInstance(mainActivity);
+                musicDBHelper.updateMusicDataToDB(musicData);
+
+
                 break;
             default:  break;
         }
@@ -180,7 +185,9 @@ public class Player extends Fragment implements View.OnClickListener{
         mediaPlayer.reset();
 
         if(flag == true){
-            musicData=mainActivity.getMusicDataArrayList().get(index);
+            MusicDBHelper musicDBHelper = MusicDBHelper.getInstance(mainActivity);
+            musicData=musicDBHelper.selectMusicTblMusicData(mainActivity.getMusicDataArrayList().get(index));
+
         }else{
 
         }
@@ -222,6 +229,11 @@ public class Player extends Fragment implements View.OnClickListener{
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     musicData.setPlayCount(musicData.getPlayCount() + 1);
+
+                    //데이타베이스에 노래듣는 카운트 증가시켜서 저장함.
+                    MusicDBHelper musicDBHelper = MusicDBHelper.getInstance(mainActivity);
+                    musicDBHelper.updateMusicDataToDB(musicData);
+
                     ibNext.callOnClick();
                 }
             });
