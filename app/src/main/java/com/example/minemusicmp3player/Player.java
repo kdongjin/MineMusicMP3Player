@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -88,18 +90,86 @@ public class Player extends Fragment implements View.OnClickListener{
         ibPrevious.setOnClickListener(this);
         ibNext.setOnClickListener(this);
         ibLike.setOnClickListener(this);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(b) mediaPlayer.seekTo(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.ibPlay  :   break;
-            case R.id.ibPrevious  :   break;
-            case R.id.ibNext  :   break;
-            case R.id.ibLike  :   break;
+            case R.id.ibPlay  :
+                if(ibPlay.isActivated() == true){
+                    mediaPlayer.pause();
+                    ibPlay.setActivated(false);
+                }else{
+                    mediaPlayer.start();
+                    ibPlay.setActivated(true);
+                    //시크바를 스레드방식으로 진행해주는 함수
+                    setSeekBarThread();
+                }
+                break;
+            case R.id.ibPrevious  :
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                index = (index == 0)? mainActivity.getMusicDataArrayList().size()-1 : index -1;
+                setPlayerData(index, true);
+                break;
+            case R.id.ibNext  :
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                index = (index ==  mainActivity.getMusicDataArrayList().size()-1) ? 0 : index+1;
+                setPlayerData(index, true);
+                break;
+            case R.id.ibLike  :
+                if(ibLike.isActivated()== true){
+                    ibLike.setActivated(false);
+                    musicData.setLiked(0);
+                    Toast.makeText(mainActivity, "좋아요취소", Toast.LENGTH_SHORT).show();
+                }else{
+                    ibLike.setActivated(true);
+                    musicData.setLiked(1);
+                    Toast.makeText(mainActivity, "좋아요", Toast.LENGTH_SHORT).show();
+                }
+                break;
             default:  break;
         }
 
+    }
+
+    private void setSeekBarThread() {
+        Thread thread = new Thread(new Runnable() {
+           SimpleDateFormat simpleDateFormat=new SimpleDateFormat("mm:ss");
+            @Override
+            public void run() {
+                while(mediaPlayer.isPlaying()==true){
+                    int timeData = mediaPlayer.getCurrentPosition();
+                    seekBar.setProgress(timeData);
+
+                    mainActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tvCurrentTime.setText(simpleDateFormat.format(timeData));
+                        }
+                    });
+                    SystemClock.sleep(100);
+                }//end of while
+            }
+        });
+
+        thread.start();
     }
 
     //리사이클러뷰에서 아이템을 선택하면 해당된 위치와 좋아요음악(false), 일반음악(true) 선택 내용이 온다.
@@ -145,7 +215,7 @@ public class Player extends Fragment implements View.OnClickListener{
             seekBar.setMax(Integer.parseInt(musicData.getDuration()));
             ibPlay.setActivated(true);
 
-            //setSeekBarThread();
+            setSeekBarThread();
 
             //한곡의 노래를 완료했을때 발생하는 이벤트 리스너
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
